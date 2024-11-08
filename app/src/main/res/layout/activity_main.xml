@@ -18,7 +18,7 @@
             android:layout_weight="1" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/signup_text"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -42,14 +42,13 @@
                 android:layout_weight="1" />
 
             <EditText
-                android:id="@+id/editTextTextEmailAddress"
+                android:id="@+id/emailInputEditText"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5"
                 android:ems="10"
-                android:hint="Enter Email Adress"
-                android:inputType="textEmailAddress"
-                android:textColor="#000000" />
+                android:hint="Enter UserName"
+                android:inputType="text" />
 
             <Space
                 android:layout_width="0dp"
@@ -74,7 +73,7 @@
                 android:layout_weight="1" />
 
             <EditText
-                android:id="@+id/editTextTextPassword"
+                android:id="@+id/editTextPassword"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5"
@@ -110,7 +109,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="4"
                 android:text="Submit"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+                android:onClick="Send_Auth"/>
+
 
             <Space
                 android:layout_width="0dp"

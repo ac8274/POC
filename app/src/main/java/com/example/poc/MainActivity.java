@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             task.getException().printStackTrace();
-                            Toast.makeText(MainActivity.this, "failure" ,Toast.LENGTH_SHORT).show();
+
                             sign_up();
                         }
                     }

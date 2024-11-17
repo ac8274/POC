@@ -1,5 +1,6 @@
 package com.example.poc;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -59,6 +60,8 @@ public class txt_file_write extends AppCompatActivity {
     }
 
     public void NextActivity(View view) {
+        Intent intent = new Intent(this, GPS_Location.class);
+        startActivity(intent);
     }
 
     public void send_text(View view) {

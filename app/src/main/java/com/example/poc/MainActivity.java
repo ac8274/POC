@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void sign_up()
     {
-        auth.createUserWithEmailAndPassword(emailInputEditText.getText().toString() + "@gmail.com", editTextPassword.getText().toString())
+        auth.createUserWithEmailAndPassword(emailInputEditText.getText().toString(), editTextPassword.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void sign_in()
     {
-        auth.signInWithEmailAndPassword(emailInputEditText.getText().toString() + "@gmail.com", editTextPassword.getText().toString())
+        auth.signInWithEmailAndPassword(emailInputEditText.getText().toString() , editTextPassword.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -77,6 +77,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void NextActivity(View view) {
         Intent intent = new Intent(this, txt_file_write.class);
+        if(user != null)
+        {intent.putExtra("FireBaseUser UID",user.getUid());}
+        else {
+            //intent.putExtra("FireBaseUser UID","");
+        }
         startActivity(intent);
     }
 }

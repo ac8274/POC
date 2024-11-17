@@ -22,6 +22,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -40,28 +42,29 @@ public class txt_file_write extends AppCompatActivity {
     Button nextBt;
     FirebaseStorage storage;
     StorageReference rootRef;
+    Intent previous;
 
     static final int REQUEST_CODE_PERMISSION = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //EdgeToEdge.enable(this);
         setContentView(R.layout.activity_txt_file_write);
         textInput = findViewById(R.id.inputTextEditText);
         submit_bt = findViewById(R.id.textSubmitButton);
         nextBt = findViewById(R.id.gpxFileButton);
         fileName = findViewById(R.id.fileNameEditText);
         storage = FirebaseStorage.getInstance();
-//        if(!checkPremission())
-//        {
-//            requestPermission();
-//        }
+        previous = getIntent();
+        if(previous.getStringExtra("FireBaseUser UID") == null)
+        {
+            finish();
+        }
     }
 
     public void NextActivity(View view) {
-        Intent intent = new Intent(this, GPS_Location.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, GPS_Location.class);
+//        startActivity(intent);
     }
 
     public void send_text(View view) {
@@ -87,11 +90,11 @@ public class txt_file_write extends AppCompatActivity {
     }
 
 
-    private boolean checkPremission()
-    {
-        int result = ContextCompat.checkSelfPermission(this,"android.permission.WRITE_EXTERNAL_STORAGE");
-        return result== PackageManager.PERMISSION_GRANTED;
-    }
+//    private boolean checkPremission()
+//    {
+//        int result = ContextCompat.checkSelfPermission(this,"android.permission.WRITE_EXTERNAL_STORAGE");
+//        return result== PackageManager.PERMISSION_GRANTED;
+//    }
 
     public boolean isExternalStorageAvailable() {
 
@@ -103,7 +106,12 @@ public class txt_file_write extends AppCompatActivity {
 
     private void uploadData(File file)
     {
-        StorageReference ref = storage.getReference().child("txtFiles/"+fileName.getText().toString() + ".txt");
+        String userUID = previous.getStringExtra("FireBaseUser UID");
+        if(userUID == null)
+        {
+            finish();
+        }
+        StorageReference ref = storage.getReference().child("userFiles/"+userUID+"/txtFiles/"+fileName.getText().toString() + ".txt");
         Uri fileUri = Uri.fromFile(file);
         UploadTask uploadTask = ref.putFile(fileUri);
 

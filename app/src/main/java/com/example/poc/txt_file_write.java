@@ -2,7 +2,6 @@ package com.example.poc;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -11,38 +10,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+import com.example.poc.Structures.FireBaseUploader;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.Files;
 
 public class txt_file_write extends AppCompatActivity {
     EditText textInput;
     EditText fileName;
     Button submit_bt;
     Button nextBt;
-    FirebaseStorage storage;
-    StorageReference rootRef;
     Intent previous;
+    FireBaseUploader uploader;
 
     static final int REQUEST_CODE_PERMISSION = 1;
 
@@ -54,8 +37,8 @@ public class txt_file_write extends AppCompatActivity {
         submit_bt = findViewById(R.id.textSubmitButton);
         nextBt = findViewById(R.id.gpxFileButton);
         fileName = findViewById(R.id.fileNameEditText);
-        storage = FirebaseStorage.getInstance();
         previous = getIntent();
+        uploader = new FireBaseUploader();
         if(previous.getStringExtra("FireBaseUser UID") == null)
         {
             finish();
@@ -70,13 +53,12 @@ public class txt_file_write extends AppCompatActivity {
     public void send_text(View view) {
         if(isExternalStorageAvailable()) {
             String data = textInput.getText().toString();
-            //File file = new File(Environment.getExternalStorageDirectory() + "/" + File.separator + fileName.getText().toString() + ".txt");
             try {
                 File externalFile = new File(this.getExternalFilesDir(null),fileName.getText().toString() +".txt");
                 FileWriter writer = new FileWriter (externalFile);
                 writer.write(data);
                 writer.close();
-                uploadData(externalFile);
+                uploader.uploadFile(externalFile,previous.getStringExtra("FireBaseUser UID"),"txt",txt_file_write.this);
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.println(Log.INFO,"creating new file","ERROR");
@@ -90,12 +72,6 @@ public class txt_file_write extends AppCompatActivity {
     }
 
 
-//    private boolean checkPremission()
-//    {
-//        int result = ContextCompat.checkSelfPermission(this,"android.permission.WRITE_EXTERNAL_STORAGE");
-//        return result== PackageManager.PERMISSION_GRANTED;
-//    }
-
     public boolean isExternalStorageAvailable() {
 
         String state = Environment.getExternalStorageState();
@@ -104,43 +80,6 @@ public class txt_file_write extends AppCompatActivity {
 
     }
 
-    private void uploadData(File file)
-    {
-        String userUID = previous.getStringExtra("FireBaseUser UID");
-        if(userUID == null)
-        {
-            finish();
-        }
-        StorageReference ref = storage.getReference().child("userFiles/"+userUID+"/txtFiles/"+fileName.getText().toString() + ".txt");
-        Uri fileUri = Uri.fromFile(file);
-        UploadTask uploadTask = ref.putFile(fileUri);
-
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
-                Log.println(Log.INFO,"dataUploadFailure",exception.getMessage().toString());
-                Toast.makeText(txt_file_write.this, "failure" ,Toast.LENGTH_SHORT).show();
-                deleteFile(file);
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                // ...
-                Toast.makeText(txt_file_write.this, "Success", Toast.LENGTH_SHORT).show();
-                deleteFile(file);
-            }
-        });
-    }
-
-    public void deleteFile(File file)
-    {
-        if(file.exists()) {
-            file.delete();
-            System.out.println("file deleted");
-        }
-    }
 
     private void requestPermission ()
     {

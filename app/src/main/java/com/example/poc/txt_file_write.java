@@ -46,8 +46,9 @@ public class txt_file_write extends AppCompatActivity {
     }
 
     public void NextActivity(View view) {
-//        Intent intent = new Intent(this, GPS_Location.class);
-//        startActivity(intent);
+        Intent intent = new Intent(this, GPS_Location.class);
+        intent.putExtra("FireBaseUser UID",previous.getStringExtra("FireBaseUser UID"));
+        startActivity(intent);
     }
 
     public void send_text(View view) {

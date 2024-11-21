@@ -15,16 +15,14 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 
-public class FireBaseUploader {
-    private FirebaseStorage storage;
-    public FireBaseUploader()
+public final class FireBaseUploader {
+    private FireBaseUploader()
     {
-        this.storage = FirebaseStorage.getInstance();
     }
-
-    public void uploadFile(File file, String userUID,String fileType, Context context)
+    public static void uploadFile(File file, String userUID,String fileType, Context context)
     {
-        StorageReference ref = storage.getReference().child("userFiles/"+userUID+"/"+fileType+"Files/"+file.getName() + "."+fileType);
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference ref = storage.getReference().child("userFiles/"+userUID+"/"+fileType+"Files/"+file.getName());
         Uri fileUri = Uri.fromFile(file);
         UploadTask uploadTask = ref.putFile(fileUri);
 

@@ -25,7 +25,6 @@ public class txt_file_write extends AppCompatActivity {
     Button submit_bt;
     Button nextBt;
     Intent previous;
-    FireBaseUploader uploader;
 
     static final int REQUEST_CODE_PERMISSION = 1;
 
@@ -38,7 +37,6 @@ public class txt_file_write extends AppCompatActivity {
         nextBt = findViewById(R.id.gpxFileButton);
         fileName = findViewById(R.id.fileNameEditText);
         previous = getIntent();
-        uploader = new FireBaseUploader();
         if(previous.getStringExtra("FireBaseUser UID") == null)
         {
             finish();
@@ -59,7 +57,7 @@ public class txt_file_write extends AppCompatActivity {
                 FileWriter writer = new FileWriter (externalFile);
                 writer.write(data);
                 writer.close();
-                uploader.uploadFile(externalFile,previous.getStringExtra("FireBaseUser UID"),"txt",txt_file_write.this);
+                FireBaseUploader.uploadFile(externalFile,previous.getStringExtra("FireBaseUser UID"),"txt",txt_file_write.this);
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.println(Log.INFO,"creating new file","ERROR");

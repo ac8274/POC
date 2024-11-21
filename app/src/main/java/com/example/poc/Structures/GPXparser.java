@@ -45,7 +45,7 @@ public class GPXparser {
     }
 
     public void addPoint(Location location,String name) throws IOException {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ssZ");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         this.serializer.startTag(null,"wpt");
         this.serializer.attribute(null,"lat",String.valueOf(location.getLatitude()));
         this.serializer.attribute(null,"lon",String.valueOf(location.getLongitude()));
@@ -54,10 +54,11 @@ public class GPXparser {
         else {this.serializer.startTag(null,"time").text(df.format(Calendar.getInstance().getTime())).endTag(null,"time");}
         this.serializer.startTag(null,"name").text(name).endTag(null,"name");
         this.serializer.startTag(null,"sym").text("Flag").endTag(null,"sym");
+        this.serializer.endTag(null,"wpt");
     }
 
     public void endWriting() throws IOException {
-        this.serializer.endTag(null,"gtx");
+        this.serializer.endTag(null,"gpx");
         this.serializer.endDocument();
     }
 }

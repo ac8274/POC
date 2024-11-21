@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 public class GPS_Location extends AppCompatActivity {
@@ -35,7 +36,7 @@ public class GPS_Location extends AppCompatActivity {
     Button gpsStartButton;
     Button gpsEndButton;
     LocationManager locationManager;
-    static Map<String,Location> two_points;
+    static HashMap<String,Location> two_points;
     Intent intent = null;
     private final LocationListener locationListener = new LocationListener() {
         @Override
@@ -43,6 +44,7 @@ public class GPS_Location extends AppCompatActivity {
             if(!first_time)
             {
                 two_points.replace("End" , location);
+                int i =0;
             }
             else
             {
@@ -59,15 +61,23 @@ public class GPS_Location extends AppCompatActivity {
         this.gpsStartButton = findViewById(R.id.gps_Tracker_Start_bt);
         this.gpsEndButton = findViewById(R.id.gps_Tracker_End_bt);
         this.locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        two_points.put("Start",null);
-        two_points.put("End",null);
+        two_points = new HashMap<String,Location>();
+        two_points.put("Start",new Location("hello"));
+        two_points.put("End",new Location("hello"));
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{"android.permission.ACCESS_FINE_LOCATION" , "android.permission.ACCESS_COARSE_LOCATION"}, REQUEST_CODE_PERMISSION);
         }
-        if(intent != null) {intent = getIntent();}
+        intent = getIntent();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        two_points.replace("Start",null);
+        two_points.replace("End",null);
+        first_time = true;
+    }
 
     @Override
 
@@ -96,9 +106,11 @@ public class GPS_Location extends AppCompatActivity {
             return;
         }
         this.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,LOCATION_REFRESH_TIME,LOCATION_REFRESH_DISTANCE,this.locationListener);
+        Toast.makeText(this, "Start Button pressed", Toast.LENGTH_LONG).show();
     }
 
     public void EndTrack(View view) {
+        Toast.makeText(this, "End Button pressed", Toast.LENGTH_LONG).show();
         this.locationManager.removeUpdates(locationListener);
         if(two_points.get("Start") != null && two_points.get("End") != null)
         {
@@ -112,8 +124,7 @@ public class GPS_Location extends AppCompatActivity {
                 parser.endWriting();
                 fileOutputStream.flush();
                 fileOutputStream.close();
-                FireBaseUploader fire = new FireBaseUploader();
-                fire.uploadFile(file,intent.getStringExtra("FireBaseUser UID"),".gpx",GPS_Location.this);
+                FireBaseUploader.uploadFile(file,intent.getStringExtra("FireBaseUser UID"),".gpx",GPS_Location.this);
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             } catch (IOException e) {

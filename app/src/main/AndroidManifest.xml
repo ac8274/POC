@@ -18,6 +18,9 @@
         android:theme="@style/Theme.POC"
         tools:targetApi="31">
         <activity
+            android:name=".SlideBarActivity"
+            android:exported="false" />
+        <activity
             android:name=".GPS_Location"
             android:exported="false" />
         <activity

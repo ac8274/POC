@@ -10,10 +10,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 public class SlideBarActivity extends AppCompatActivity {
-    TextView SlideBarOther;
-    SeekBar seekBar;
+    static TextView SlideBarOther;
+    static SeekBar seekBar;
     int lastProgress=0;
     static boolean messageRecived = false;
+    Thread listener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,6 +22,7 @@ public class SlideBarActivity extends AppCompatActivity {
         SlideBarOther = findViewById(R.id.SlideBarOther);
         seekBar = findViewById(R.id.seekBar);
         seekBar.setOnSeekBarChangeListener(seek);
+        listener = new Thread(); // don't forget to start new runnable
     }
 
 
@@ -46,5 +48,12 @@ public class SlideBarActivity extends AppCompatActivity {
             messageRecived = true;
         }
     };
-
+    public static int GetProgress()
+    {
+        return seekBar.getProgress();
+    }
+    public static void OtherUser(String score)
+    {
+        SlideBarOther.setText(score);
+    }
 }

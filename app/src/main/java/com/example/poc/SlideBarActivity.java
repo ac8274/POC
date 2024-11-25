@@ -7,50 +7,27 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.poc.Structures.HotSpot;
 
 
 public class SlideBarActivity extends AppCompatActivity {
     static TextView SlideBarOther;
     static SeekBar seekBar;
-    int lastProgress=0;
-    static boolean messageRecived = false;
-    Thread listener;
+    HotSpot listener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_slide_bar);
         SlideBarOther = findViewById(R.id.SlideBarOther);
         seekBar = findViewById(R.id.seekBar);
-        seekBar.setOnSeekBarChangeListener(seek);
-        listener = new Thread(); // don't forget to start new runnable
+        listener = new HotSpot("0.0.0.0",4454); // don't forget to start new runnable
+        listener.start();
     }
 
-
-    private OnSeekBarChangeListener seek = new OnSeekBarChangeListener() {
-        @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            if (fromUser) {
-                if (!messageRecived) {
-                    seekBar.setProgress(lastProgress);
-                } else {
-                    seekBar.setProgress(progress);
-                }
-            }
-        }
-
-        @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
-            lastProgress = seekBar.getProgress();
-        }
-
-        @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
-            messageRecived = true;
-        }
-    };
     public static int GetProgress()
     {
-        return seekBar.getProgress();
+        int g=seekBar.getProgress();
+        return g;
     }
     public static void OtherUser(String score)
     {

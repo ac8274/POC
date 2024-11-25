@@ -33,6 +33,7 @@ public class GPS_Location extends AppCompatActivity {
     int LOCATION_REFRESH_DISTANCE = 0;
     int REQUEST_CODE_PERMISSION = 2;
     static boolean first_time = true;
+    Button next_button;
     Button gpsStartButton;
     Button gpsEndButton;
     LocationManager locationManager;
@@ -58,6 +59,7 @@ public class GPS_Location extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gps_location);
+        this.next_button = findViewById(R.id.next_button);
         this.gpsStartButton = findViewById(R.id.gps_Tracker_Start_bt);
         this.gpsEndButton = findViewById(R.id.gps_Tracker_End_bt);
         this.locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -131,5 +133,10 @@ public class GPS_Location extends AppCompatActivity {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public void Next_Activity(View view) {
+        Intent si = new Intent(this, SlideBarActivity.class);
+        startActivity(si);
     }
 }

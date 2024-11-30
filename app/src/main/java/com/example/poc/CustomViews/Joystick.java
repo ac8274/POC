@@ -12,8 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class Joystick extends View {
-    private float mCirceleX;
-    private float mCirceleY;
+    private float[] mCirceleX;
+    private float[] mCirceleY;
     private Paint mPaintCircle;
     private static final float mCircleRadius = 100;
 
@@ -41,8 +41,8 @@ public class Joystick extends View {
 
     public void init(@Nullable AttributeSet set)
     {
-        mCirceleX = 0;
-        mCirceleY =0;
+        mCirceleX = new float[2];
+        mCirceleY =new float[2];
         mPaintCircle = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaintCircle.setColor(Color.parseColor("#FF0000"));
     }
@@ -50,13 +50,24 @@ public class Joystick extends View {
     @Override
     protected void onDraw(@NonNull Canvas canvas)
     {
-        if(0f == mCirceleX && 0f == mCirceleY) {
-            mCirceleX = getWidth() / 2;
-            mCirceleY = getHeight() / 2;
+        if(0f == mCirceleX[0] && 0f == mCirceleY[0]) {
+            mCirceleX[0] = getWidth() / 2;
+            mCirceleY[0] = getHeight() / 2;
         }
+        mCirceleX[1] = 0;
+        mCirceleY[1] = 0;
+        canvas.drawCircle(mCirceleX[0],mCirceleY[0],mCircleRadius,mPaintCircle);
 
-        canvas.drawCircle(mCirceleX,mCirceleY,mCircleRadius,mPaintCircle);
+    }
 
+    public float getXDistance()
+    {
+        return mCirceleX[0]-mCirceleX[1];
+    }
+
+    public float getYDistance()
+    {
+        return mCirceleY[0]-mCirceleY[1];
     }
 
     @Override
@@ -64,19 +75,25 @@ public class Joystick extends View {
     {
         boolean value = super.onTouchEvent(event);
 
-        if (event.getAction() == MotionEvent.ACTION_MOVE)  // if on my view was preformed the action of moving
+        switch(event.getAction())
         {
-            if(Math.pow(event.getX() - mCirceleX,2) + Math.pow(event.getY() - mCirceleY,2) < Math.pow(mCircleRadius,2)) //check if the touched part is inside my joystickCenter
-            {
-                mCirceleY = event.getY(); // set new position X of joystickCenter
-                mCirceleX = event.getX(); // set new position X of joystickCenter
-
-                postInvalidate(); // update the UI of changes
+            case MotionEvent.ACTION_DOWN:
+                mCirceleX[1] = mCirceleX[0];
+                mCirceleY[1] = mCirceleY[0];
                 return true;
-            }
-            return value;
-        }
 
+            case MotionEvent.ACTION_MOVE:
+                if(Math.pow(event.getX() - mCirceleX[0],2) + Math.pow(event.getY() - mCirceleY[0],2) < Math.pow(mCircleRadius,2)) //check if the touched part is inside my joystickCenter
+                {
+                    mCirceleY[0] = event.getY(); // set new position X of joystickCenter
+                    mCirceleX[0] = event.getX(); // set new position X of joystickCenter
+
+                    postInvalidate(); // update the UI of changes
+                    return true;
+                }
+                return value;
+
+        }
         return value;
     }
 }

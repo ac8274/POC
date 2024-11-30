@@ -1,6 +1,8 @@
 package com.example.poc;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -32,5 +34,10 @@ public class SlideBarActivity extends AppCompatActivity {
     public static void OtherUser(String score)
     {
         SlideBarOther.setText(score);
+    }
+
+    public void NextActivity(View view) {
+        Intent intent = new Intent(this, Joystick_View.class);
+        startActivity(intent);
     }
 }

@@ -53,11 +53,11 @@ public class HotSpot extends Thread{
 
             // Listen for incoming connections
             Socket clientSocket = serverSocket.accept();
+            serverSocket.close(); // the client was accepted no more need for socket
             System.out.println("Client connected: " + clientSocket.getInetAddress().getHostAddress());
             handleClient(clientSocket);
             clientSocket.close();
 
-            //}
         } catch (Exception e) {
             e.printStackTrace();
             Log.e(TAG, "Exception in ServerThread: " + e.getMessage());

@@ -12,6 +12,6 @@ public class Joystick_View extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_joystick_view);
-         joystick = new Joystick(this);
+        joystick = new Joystick(this);
     }
 }

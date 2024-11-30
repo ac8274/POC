@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,7 +22,6 @@ public class SlideBarActivity extends AppCompatActivity {
         SlideBarOther = findViewById(R.id.SlideBarOther);
         seekBar = findViewById(R.id.seekBar);
         listener = new HotSpot("0.0.0.0",4454); // don't forget to start new runnable
-        listener.start();
     }
 
     public static int GetProgress()
@@ -39,5 +37,9 @@ public class SlideBarActivity extends AppCompatActivity {
     public void NextActivity(View view) {
         Intent intent = new Intent(this, Joystick_View.class);
         startActivity(intent);
+    }
+
+    public void StartListening(View view) {
+        listener.start();
     }
 }

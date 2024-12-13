@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private Button Submit_bt;
+    private Button txt_file_write_button;
     private TextView signup_text;
     private EditText emailInputEditText;
     private EditText editTextPassword;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Submit_bt = findViewById(R.id.Submit_bt);
+        txt_file_write_button = findViewById(R.id.txt_file_write_button);
         signup_text = findViewById(R.id.signup_text);
         emailInputEditText = findViewById(R.id.emailInputEditText);
         editTextPassword = findViewById(R.id.editTextPassword);
